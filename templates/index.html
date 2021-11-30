@@ -20,7 +20,7 @@
       </div>
       <!-- Add section for Mars News -->
       <div class="row" id="mars-news">
-        <div class="col-md-12">
+        <div class="col-md-4">
           <div class="media">
             <div class="media-body">
               <h2>Latest Mars News</h2>
@@ -32,7 +32,7 @@
       </div>
       <!-- Section for Featured Image and Facts table -->
       <div class="row" id="mars-featured-image">
-        <div class="col-md-8">
+        <div class="col-md-4">
           <h2>Featured Mars Image</h2>
           <img
             src="{{mars.featured_image }}"
@@ -48,6 +48,16 @@
           </div>
         </div>
       </div>
+      <!-- Section for Hemisphere Image and Title -->
+      <div class="row" id="mars-hemisphere-image">
+        <div class="col-md-4">
+          <h2>{{ mars.title}}</h2>
+          <img
+            src="{{mars.img_url}}"
+            class="img-responsive"
+            alt="Responsive image"
+          />
+        </div>
     </div>
   </body>
 </html>

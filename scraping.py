@@ -12,6 +12,7 @@ def scrape_all():
     browser = Browser('chrome', **executable_path, headless=False)
 
     news_title, news_paragraph = mars_news(browser)
+    img_url, title = mars_hemisphere_data(browser)
 
     # Run all scraping functions and store results in a dictionary
     data = {
@@ -19,7 +20,9 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        "img_url" : img_url,
+        "title" : title
     }
 
     # Stop webdriver and return data
@@ -96,6 +99,38 @@ def mars_facts():
 
     # Convert dataframe into HTML format, add bootstrap
     return df.to_html(classes="table table-striped")
+
+def mars_hemisphere_data(browser):
+    # 1. Use browser to visit the URL 
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+    
+    # 2. Create a list to hold the images and titles.
+    hemisphere_image_urls = []
+    # 3. Write code to retrieve the image urls and titles for each hemisphere.
+    #need to adjust to find the full image url
+    html = browser.html
+    hemisphere_results = soup(html, 'html.parser')
+
+    for img_location_rel in hemisphere_results:
+        #rel location fixed, full image found, how to get this to loop without errors? 
+        img_location_rel = hemisphere_results.find('a', class_='itemLink product-item').get('href')
+        img_location = f'{url}{img_location_rel}'
+        browser.visit(img_location)
+        html = browser.html
+        result = soup(html, 'html.parser')
+        img_src = result.find('img', class_='wide-image').get('src')
+        img_url = f'{url}{img_src}'
+        title = result.find('h2', class_='title').text
+
+        hemispheres = {
+            'img_url' : img_url,
+            'title' : title
+            }
+        
+        hemisphere_image_urls.append(hemispheres)
+        browser.back()
+    return img_url, title
 
 if __name__ == "__main__":
 
